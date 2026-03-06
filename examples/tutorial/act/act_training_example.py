@@ -35,7 +35,7 @@ def main():
     output_features = {key: ft for key, ft in features.items() if ft.type is FeatureType.ACTION}
     input_features = {key: ft for key, ft in features.items() if key not in output_features}
 
-    cfg = ACTConfig(input_features=input_features, output_features=output_features)
+    cfg = ACTConfig(input_features=input_features, output_features=output_features, device=device.type)
     policy = ACTPolicy(cfg)
     preprocessor, postprocessor = make_pre_post_processors(cfg, dataset_stats=dataset_metadata.stats)
 
@@ -58,7 +58,7 @@ def main():
 
     # Create the optimizer and dataloader for offline training
     optimizer = cfg.get_optimizer_preset().build(policy.parameters())
-    batch_size = 32
+    batch_size = 4
     dataloader = torch.utils.data.DataLoader(
         dataset,
         batch_size=batch_size,
